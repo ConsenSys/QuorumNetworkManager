@@ -110,7 +110,7 @@ NOTE: the public-key (use ssh-keygen to generate one) of the machine you are wor
 
 1. `git clone git@github.com:davebryson/quorum-genesis.git`
 2. `cd quorum-genesis`
-3. `sudo npm install -g`
+3. `sudo npm install`
 
 ## Installing the QuorumNetworkManager
 
