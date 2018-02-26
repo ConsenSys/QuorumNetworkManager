@@ -28,7 +28,7 @@ function clearDirectories(result, cb){
   var cmd = 'rm -rf';
   for(var i in result.folders){
     var folder = result.folders[i];
-    cmd += ' '+folder;    
+    cmd += ' '+ folder + '/*';    
   }
   var child = exec(cmd, function(){
     cb(null, result);
