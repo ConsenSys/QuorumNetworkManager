@@ -1,4 +1,5 @@
 //TODO: These can be overwritten with commandline variables passed when running setupFromConfig
+var path = require('path');
 
 let env = process.env
 let config = {}
@@ -30,6 +31,8 @@ config.whisper.powTarget = 0.5
 
 // Change these for different setups. 
 config.setup = {}
+// data dir
+config.setup.dataDir = env.DATA_DIR ? path.join(env.DATA_DIR, '/').replace(/\/$/, '') : '.';
 // Enter ip address as a string
 config.setup.localIpAddress = env.IP ? env.IP : '127.0.0.1'
 // Only allowAll for now

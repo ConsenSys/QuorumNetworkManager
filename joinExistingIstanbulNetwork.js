@@ -17,9 +17,10 @@ function startIstanbulNode(result, cb){
   console.log('[*] Starting istanbul node...')
   let options = {encoding: 'utf8', timeout: 100*1000}
   let cmd = './startIstanbulNode.sh'
-  cmd += ' '+ports.gethNode
-  cmd += ' '+ports.gethNodeRPC
-  cmd += ' '+ports.gethNodeWS_RPC
+  cmd += ' '+setup.dataDir;
+  cmd += ' '+ports.gethNode;
+  cmd += ' '+ports.gethNodeRPC;
+  cmd += ' '+ports.gethNodeWS_RPC;
   let child = exec(cmd, options)
   child.stdout.on('data', function(data){
     cb(null, result)

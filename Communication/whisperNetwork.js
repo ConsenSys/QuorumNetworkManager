@@ -1,11 +1,13 @@
 var exec = require('child_process').exec;
 var fs = require('fs');
 var async = require('async');
+var path = require('path');
 
 var events = require('../eventEmitter.js');
 var util = require('../util.js');
-var config = require('../config.js')
-var ports = require('../config.js').ports
+var config = require('../config.js');
+let ports = config.ports;
+let setup = config.setup;
 var networkMembership = require('./networkMembership.js');
 var istanbulNetworkMembership = require('./istanbulNetworkMembership.js');
 var nodeInformation = require('./nodeInformation.js');
@@ -141,7 +143,7 @@ function copyCommunicationNodeKey(result, cb){
 
 // TODO: Add check whether requester has correct permissions
 function genesisConfigHandler(result, cb){
-  let genesisPath = process.cwd() + '/quorum-genesis.json'
+  let genesisPath = path.join(setup.dataDir, 'quorum-genesis.json');
   let web3WSRPC = result.web3WSRPC;
 
   function onData(msg){
@@ -169,7 +171,7 @@ function genesisConfigHandler(result, cb){
 }
 
 function staticNodesFileHandler(result, cb){
-  let staticNodesPath = process.cwd() + '/Blockchain/static-nodes.json'
+  let staticNodesPath = path.join(process.cwd(), '/Blockchain/static-nodes.json');
   let web3WSRPC = result.web3WSRPC;
 
   function onData(msg){
@@ -223,7 +225,7 @@ function getGenesisBlockConfig(result, cb){
         let genesisConfig = message.replace(response.genesisConfig, '').substring(1)
         genesisConfig = genesisConfig.replace(/\\n/g, '')
         genesisConfig = genesisConfig.replace(/\\/g, '')
-        fs.writeFile('quorum-genesis.json', genesisConfig, function(err, res){
+        fs.writeFile(path.join(setup.dataDir, 'quorum-genesis.json'), genesisConfig, function(err, res){
           cb(err, result)
         })
       }

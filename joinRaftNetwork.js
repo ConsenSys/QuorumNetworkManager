@@ -21,10 +21,11 @@ function displayGethAccount(result, cb){
 function startRaftNode(result, cb){
   let options = {encoding: 'utf8', timeout: 100*1000}
   let cmd = './startRaftNode.sh'
-  cmd += ' '+ports.gethNode
-  cmd += ' '+ports.gethNodeRPC
-  cmd += ' '+ports.gethNodeWS_RPC
-  cmd += ' '+ports.raftHttp
+  cmd += ' '+setup.dataDir;
+  cmd += ' '+ports.gethNode;
+  cmd += ' '+ports.gethNodeRPC;
+  cmd += ' '+ports.gethNodeWS_RPC;
+  cmd += ' '+ports.raftHttp;
   if(result.networkMembership === 'permissionedNodes'){
     cmd += ' permissionedNodes' 
   } else {
