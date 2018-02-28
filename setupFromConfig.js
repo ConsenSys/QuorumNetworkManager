@@ -8,6 +8,7 @@ let joinExistingIstanbul = require('./joinExistingIstanbulNetwork.js')
 function run(){
   console.log('[SetupFromConfig] Starting setup from config')
   console.log('==== Setup config ====')
+  console.log('[DATA_DIR]', setup.dataDir)
   console.log('[IP]', setup.localIpAddress)
   console.log('[NODE_NAME]', config.identity.nodeName)
   console.log('[COORDINATING_IP]', setup.remoteIpAddress)

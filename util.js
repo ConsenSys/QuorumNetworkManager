@@ -1,13 +1,14 @@
 var exec = require('child_process').exec;
-var ps = require('ps-node')
+var ps = require('ps-node');
 var fs = require('fs');
-var async = require('async')
-var prompt = require('prompt')
+var async = require('async');
+var prompt = require('prompt');
+var path = require('path');
 prompt.start();
 
-let config = require('./config.js')
-let ports = config.ports
-let setup = config.setup
+let config = require('./config.js');
+let ports = config.ports;
+let setup = config.setup;
 
 let constellation = require('./constellation.js')
 
@@ -28,7 +29,7 @@ function clearDirectories(result, cb){
   var cmd = 'rm -rf';
   for(var i in result.folders){
     var folder = result.folders[i];
-    cmd += ' '+folder;    
+    cmd += ' '+ folder + '/*';
   }
   var child = exec(cmd, function(){
     cb(null, result);
@@ -39,8 +40,8 @@ function clearDirectories(result, cb){
   });
 }
 
-function createDirectories(result, cb){
-  var cmd = 'mkdir';
+function createDirectories(result, cb) {
+  var cmd = 'mkdir -p';
   for(var i in result.folders){
     var folder = result.folders[i];
     cmd += ' '+folder;    
@@ -64,12 +65,12 @@ function hex2a(hexx) {
 }
 
 // TODO: Add failure after a number of retries
-function waitForIPCPath(path, cb){
-  if (fs.existsSync(path)) {
+function waitForIPCPath(ipcPath, cb){
+  if (fs.existsSync(ipcPath)) {
     cb()
   } else {
     setTimeout(function(){
-      waitForIPCPath(path, cb)
+      waitForIPCPath(ipcPath, cb)
     }, 1000)
   }
 }
@@ -228,9 +229,9 @@ function createRaftGenesisBlockConfig(result, cb){
     }
   }
 
-  let genesisConfig = JSON.stringify(genesisTemplate)
+  let genesisConfig = JSON.stringify(genesisTemplate);
 
-  fs.writeFile('quorum-genesis.json', genesisConfig, 'utf8', function(err, res){
+  fs.writeFile(path.join(setup.dataDir, 'quorum-genesis.json'), genesisConfig, 'utf8', function(err, res){
     result.communicationNetwork.genesisBlockConfigReady = true;
     cb(err, result);
   })
@@ -444,7 +445,7 @@ function getIstanbulConfiguration(result, cb){
           "balance": "0x446c3b15f9926687d2c40534fdb564000000000000"
         }
       }
-      fs.writeFileSync('quorum-genesis.json', JSON.stringify(genesisJSON), 'utf8') 
+      fs.writeFileSync(path.join(setup.dataDir, 'quorum-genesis.json'), JSON.stringify(genesisJSON), 'utf8') 
 
       result.communicationNetwork.genesisBlockConfigReady = true
       result.communicationNetwork.staticNodesFileReady = true
