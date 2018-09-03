@@ -67,7 +67,7 @@ By setting options in the `config.js` file, users can now start a node with `nod
 
 ## Running with pm2
 
-Install pm2: `npm install pm2@latest -g`
+Install pm2: `npm install -g pm2`
 
 Start the script with `pm2 start setupFromConfig.js`. To list all pm2: `pm2 l`, to stop all: `pm2 stop all`. To completely unload all pm2 processes: `pm2 kill`.
 

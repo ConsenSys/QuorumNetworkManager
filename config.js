@@ -31,7 +31,7 @@ config.whisper.diskEncryptionPassword = 'insertSecurePassword' || process.env.WH
 config.whisper.diskEncryptionDirectory = 'WhisperKeys' || process.env.WHISPER_DISK_ENCRYPTION_DIRECTORY
 config.whisper.diskEncryptionFileName = 'whisperKeys.txt'
 
-// Change these for different setups. 
+// Change these for different setups.
 config.setup = {}
 // Enter ip address as a string
 config.setup.localIpAddress = env.IP ? env.IP : '127.0.0.1'
@@ -41,7 +41,7 @@ config.setup.networkMembership = env.NETWORK_MEMBERSHIP ? env.NETWORK_MEMBERSHIP
 config.setup.keepExistingFiles = (env.KEEP_FILES == 'true')
 // Options are true or false. This refers to the nodekey and keystore
 config.setup.deleteKeys = (env.DELETE_KEYS == 'true')
-// Only raft supported for now
+// Only raft and istanbul supported for now
 config.setup.consensus = env.CONSENSUS ? env.CONSENSUS : 'raft'
 // Options are coordinator, non-coordinator, dynamicPeer
 config.setup.role = env.ROLE ? env.ROLE : 'coordinator'
