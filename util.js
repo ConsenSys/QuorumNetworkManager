@@ -308,23 +308,42 @@ function getEnodePubKey(cb){
 }
 
 function generateEnode(result, cb){
-  console.log('Generating node key')
+  let reuseEnode = false;
   if(result.consensus === 'raft'){
     let options = {encoding: 'utf8', timeout: 10*1000};
-    let child = exec('bootnode -genkey Blockchain/geth/nodekey', options)
-    child.stderr.on('data', function(error){
-      console.log('ERROR:', error)
-    })
-    child.stdout.on('close', function(error){
+    if( fs.existsSync('Blockchain/geth/nodekey') ) {
+      reuseEnode = true;
+    }
+    if(reuseEnode) {
+      console.log('Reusing node key');
       getEnodePubKey(function(err, pubKey){
         let enode = 'enode://'+pubKey+'@'+result.localIpAddress+':'+ports.gethNode+
           '?raftport='+ports.raftHttp
         result.nodePubKey = pubKey
         result.enodeList = [enode]
         cb(null, result)
+      });
+    } else {
+      console.log('Generating node key')
+      let child = exec('bootnode -genkey Blockchain/geth/nodekey', options)
+      child.stderr.on('data', function(error){
+        console.log('ERROR:', error)
       })
-    })
+      child.stdout.on('close', function(error){
+        getEnodePubKey(function(err, pubKey){
+          let enode = 'enode://'+pubKey+'@'+result.localIpAddress+':'+ports.gethNode+
+          '?raftport='+ports.raftHttp
+          result.nodePubKey = pubKey
+          result.enodeList = [enode]
+          cb(null, result)
+        })
+      })
+    }  
   } else if(result.consensus === 'istanbul'){
+    if(!reuseEnode) {
+      console.log('Generating node key')
+    }
+
     runIstanbulTools(function(err, dataString){
       getIstanbulSetupFromIstanbulTools(dataString, function(err, validatorsJSON, staticNodesJSON, genesisJSON){
         let validatorAddress = validatorsJSON['Address']
@@ -341,6 +360,9 @@ function generateEnode(result, cb){
       })
     })
   } else {
+    if(!reuseEnode) {
+      console.log('Generating node key')
+    }
     console.log('ERROR: Invalid consensus choice')
     cb(null, null)
   }
